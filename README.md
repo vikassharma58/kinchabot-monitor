@@ -1,10 +1,10 @@
 # 🤖 Kincha Pharma Monitor — Project Board
 
-**Client:** Pfizer (Pilot) | **Bot:** Kincha | **Updated:** 2026-03-23
+**Client:** Pfizer (Pilot) | **Bot:** Kincha | **Updated:** 2026-03-23 12:05 UTC
 
 ---
 
-## ✅ Done
+## ✅ Done (5)
 
 | # | Task | Completed |
 |---|------|-----------|
@@ -12,27 +12,20 @@
 | 2 | 30-day lookback scan (Mar 14–22, 2026) | Mar 22, 2026 |
 | 3 | Connect Google Sheet via Apps Script webhook | Mar 22, 2026 |
 | 4 | Post 4 findings to Google Sheet | Mar 22, 2026 |
+| 5 | Set up GitHub Kanban board (this board) | Mar 23, 2026 |
 
 ---
 
-## 🔄 In Progress
-
-| # | Task | Owner | Notes |
-|---|------|-------|-------|
-| 5 | Set up GitHub Kanban board | Kincha | This board! |
-
----
-
-## ⏳ Blocked (Waiting on Vikas)
+## ⏳ Blocked — Waiting on Vikas (2)
 
 | # | Task | Waiting For |
 |---|------|------------|
-| 6 | Set up Supabase database | Vikas to create free account at supabase.com + share credentials |
-| 7 | Set up Neo4j AuraDB knowledge graph | Vikas to create free account at neo4j.com/cloud/aura-free + share credentials |
+| 6 | Set up Supabase database | Create free account → supabase.com → share URL + API key |
+| 7 | Set up Neo4j AuraDB knowledge graph | Create free account → neo4j.com/cloud/aura-free → share URI + password |
 
 ---
 
-## 📋 Backlog
+## 📋 Backlog (9)
 
 | # | Task | Priority |
 |---|------|----------|
@@ -44,17 +37,17 @@
 | 13 | Update monitor: 30-min, 5–9PM IST, 25 companies, 6 indications | 🟡 Medium |
 | 14 | Set up email alerts to vikas@atacana.com | 🟡 Medium |
 | 15 | Set up direct website crawling (FDA, EMA, 25 company pages) | 🟡 Medium |
-| 16 | Full Pfizer pilot live | 🟢 Goal |
+| 16 | Full Pfizer pilot live | 🏁 Goal |
 
 ---
 
-## 📊 Monitoring Setup (Target)
+## 📊 Monitoring Setup
 
 | Parameter | Current | Target |
 |-----------|---------|--------|
 | Companies | 12 | 25 |
-| Indications | 2 (Psoriasis, Ovarian Ca) | 6 (+ UC, Crohn's, Lupus, RA) |
-| Frequency | Daily | Every 30 min, 5–9PM IST |
+| Indications | 2 (Psoriasis, Ovarian Ca) | 6 (+UC, Crohn's, Lupus, RA) |
+| Frequency | Daily digest | Every 30 min, 5–9PM IST |
 | Alert type | Simple | Enriched (RAG + Knowledge Graph) |
 | Storage | Google Sheets | Supabase (Postgres + pgvector) |
 | Client | — | Pfizer |
