@@ -110,6 +110,7 @@ Source URL
 | MEDIUM | Email alerts to vikas@atacana.com | Need SendGrid or SMTP |
 | MEDIUM | Neo4j visual explorer (GitHub Pages) | Ready to build |
 | MEDIUM | Haiku crawling + Sonnet alerts (cost saving) | After crawlers built |
+| RECURRING | Update this doc + discussion summary daily | Scheduled task set up |
 | GOAL | Full pilot go-live | After all HIGH items done |
 
 ---
@@ -124,7 +125,53 @@ Source URL
 | Mar 23 2026 | Decided Firecrawl over RSS for web crawling |
 | Mar 23 2026 | Monitor paused - building full pilot first |
 | Mar 24 2026 | Token-saving strategy: fresh chats + Haiku for crawling |
+| Mar 24 2026 | Daily documentation update task created |
 
 ---
 
-*Maintained by Kincha bot*
+## 11. Discussion Summary Log
+
+### Mar 22, 2026
+- First session. Set up hourly pharma monitor for 12 companies (Psoriasis + Ovarian Cancer)
+- Connected Google Sheet via Apps Script webhook
+- Ran 30-day lookback scan, posted 4 findings to Google Sheet (J&J, Sun Pharma, BMS, GSK)
+- Troubleshot: Apps Script deployment URLs, HTML entities in pasted code, curl redirect issue
+
+### Mar 23, 2026 — Morning/Afternoon
+**Decisions made:**
+- Client = Pfizer. Competitors = top 25 pharma (excl. Pfizer)
+- Indications = Plaque Psoriasis, Psoriatic Arthritis, UC, Crohns, Lupus, RA
+- Monitoring = every 30 min, 5-9 PM IST
+- Alert destination = WhatsApp (active) + email vikas@atacana.com (pending)
+- Databases = Supabase (free) + Neo4j AuraDB (free)
+- Alert format = enriched 5-part (What / Context / New vs Known / Pfizer implications / Source)
+
+**Built:**
+- Supabase database: findings table + companies + indications + pgvector + RLS
+- Neo4j knowledge graph: 27 companies, 19 drugs, 6 indications loaded
+- GitHub Kanban board: README-based at kinchabot-monitor repo
+- Scheduled monitor task: 30-min cadence, 25 companies x 6 indications, enriched format
+
+**Findings reported:**
+- Roche Gazyva Phase 3 NEJM (Lupus) - 76.7% SRI-4 response
+- Takeda Zasocitinib Phase 3 (Plaque Psoriasis) - all endpoints met
+
+**Troubleshot:**
+- Neo4j database name = bb84eae8 (not neo4j or data)
+- GitHub classic token needed for Projects API
+- Repo needed to be public for board access
+
+### Mar 24, 2026
+**Decisions made:**
+- Use Firecrawl for web crawling (over RSS feeds)
+- Save tokens: short chats, Haiku for crawling, Sonnet for alerts, fresh chats periodically
+- Create daily documentation update as recurring task
+- Supabase companies + indications tables are empty - need populating
+
+**Pending from Vikas:**
+- Firecrawl API key (sign up at firecrawl.dev)
+- Drug profiles table from Claude.ai research prompt
+
+---
+
+*Auto-updated daily by Kincha bot*
