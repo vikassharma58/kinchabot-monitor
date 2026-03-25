@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-25
+
+**Findings:** 0 new items
+**Sources checked:** Pipeline paused until 05:32 UTC; runs at 12:30 + 14:30 UTC (6PM + 8PM IST) resumed — no new findings
+**Pipeline runs:** 2 runs scheduled, pipeline_logs not yet writing (prompt update pending)
+**System changes:**
+- All tasks resumed (were paused Mar 24 for cost optimisation)
+- Monitoring schedule changed: 10 runs/day → 2 runs/day (6PM + 8PM IST)
+- GitHub token restored and stored in task prompts
+- UPDATES.md created as new daily activity log
+- DOCUMENTATION.md fully updated with Mar 24 summary
+**Pending:**
+- Anthropic API key (for Haiku sub-agent calls → drops cost from ~$26 to ~$1/month)
+- Email alerts setup (Resend.com or SendGrid API key)
+- Fix EMA RSS URL (404)
+
+---
+
 ## 2026-03-24
 
 **Findings:** 2 new items saved to Supabase + Neo4j
