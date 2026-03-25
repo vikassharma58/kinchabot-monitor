@@ -282,3 +282,81 @@ The 6PM and 8PM runs no longer check ClinicalTrials — eliminating redundant AP
 15 companies × 2 runs/day × 30 days = **900 pages/month**
 Free tier = 500 pages/month → **upgrade to Hobby plan (~$16/month, 3,000 pages) required**
 
+---
+
+## Cost Reference — Token Breakdown
+
+### Per Run: Detailed Token Cost
+
+**Scenario A — No findings (most runs)**
+
+| Source | Tokens | Type |
+|--------|--------|------|
+| Task prompt (instructions) | ~3,000 | Input |
+| Firecrawl — 15 companies × ~400 tokens | ~6,000 | Input |
+| FDA search results | ~800 | Input |
+| EMA search results | ~400 | Input |
+| Agent 1 output — "nothing relevant" | ~100 | Output |
+| Agent 4 output — log + "no findings" message | ~300 | Output |
+| **Total** | **~10,200 input / ~400 output** | |
+
+**Cost (Sonnet):** 10,200 × $3/M + 400 × $15/M = **~$0.037/run**
+
+---
+
+**Scenario B — 1 finding discovered**
+
+| Source | Tokens | Type |
+|--------|--------|------|
+| Everything from Scenario A | ~10,200 | Input |
+| Neo4j query + competitive context response | ~400 | Input |
+| Supabase RAG — 5 past findings retrieved | ~600 | Input |
+| Agent 3 output — enriched 5-part alert | ~600 | Output |
+| Agent 3 output — Neo4j MERGE Cypher | ~150 | Output |
+| Agent 4 — quality check + pipeline log | ~300 | Output |
+| **Total** | **~11,400 input / ~1,400 output** | |
+
+**Cost (Sonnet):** 11,400 × $3/M + 1,400 × $15/M = **~$0.055/run**
+
+> **Key:** Output tokens cost 5× more than input ($15 vs $3/M). Agent 3 writing the alert (~600 output tokens) is the single most expensive step.
+
+---
+
+### Monthly Cost Scenarios
+
+**Assumptions:**
+- 1 run/day (6:30 PM IST) = 30 runs/month
+- Separate ClinicalTrials task: ~$0.30/month flat
+- Digest + EOD update: ~$0.60/month flat
+- Fixed overhead: ~$0.90/month
+
+| Finding frequency | Findings/month | Pipeline cost | Total monthly |
+|------------------|---------------|--------------|---------------|
+| No news | 0 | 30 × $0.037 = $1.11 | **~$2.00/month** |
+| Light (1 per week total) | ~4 | $1.18 | **~$2.10/month** |
+| **1 per company per week** | **~60** | **30 runs mix = ~$1.65** | **~$2.55/month** |
+| Heavy (2 per company per week) | ~120 | ~$2.20 | **~$3.10/month** |
+
+**1 news per company per week breakdown:**
+- 15 companies × 4 weeks = ~60 findings/month
+- ~20 runs have 0 findings: 20 × $0.037 = $0.74
+- ~10 runs have 1-2 findings each: 10 × $0.065 avg = $0.65
+- Pipeline subtotal: ~$1.39
+- + Fixed overhead: $0.90
+- **Total: ~$2.30/month**
+
+---
+
+### With Haiku Optimisation (pending Anthropic API key)
+
+When Agents 1, 2 and 4 run on Haiku ($0.25/M input, $1.25/M output) and only Agent 3 uses Sonnet:
+
+| Finding frequency | Current (all Sonnet) | Optimised (Haiku+Sonnet) | Saving |
+|------------------|---------------------|--------------------------|--------|
+| 0 findings/month | ~$2.00 | ~$0.55 | 73% |
+| 60 findings/month (1/company/week) | ~$2.30 | ~$1.10 | 52% |
+| 120 findings/month | ~$3.10 | ~$1.65 | 47% |
+
+**Haiku is worth implementing** — saves ~$1-1.50/month even at high finding volume.
+To implement: share your Anthropic API key (starts with `sk-ant-...`).
+
