@@ -249,3 +249,36 @@ This means both databases **self-update** as new news comes in — no manual dat
 - 9PM IST: daily digest
 - 11:15PM IST: GitHub files updated (UPDATES.md + DOCUMENTATION.md + WORKFLOW.md)
 
+---
+
+## Changes — 2026-03-25 (Update 2)
+
+### ClinicalTrials.gov — Dedicated Smart Task
+
+ClinicalTrials.gov updates its database **once daily at ~9 AM UTC**. Checking it at 6PM and 8PM IST was wasteful — no new data would exist. 
+
+**Solution:** Dedicated lightweight task runs at **9:15 AM UTC (2:45 PM IST)** — right after the daily update window.
+
+| What it checks | How |
+|---------------|-----|
+| New studies posted TODAY | `filter.advanced=AREA[StudyFirstPostDate]RANGE[TODAY,TODAY]` |
+| Studies UPDATED today | `filter.advanced=AREA[LastUpdatePostDate]RANGE[TODAY,TODAY]` |
+
+Task ID: `task-1774417534376-mayzry` | Schedule: `15 9 * * *` UTC
+
+The 6PM and 8PM runs no longer check ClinicalTrials — eliminating redundant API calls.
+
+### Final Schedule
+
+| Time (IST) | Time (UTC) | Task | Sources |
+|------------|------------|------|---------|
+| 2:45 PM | 9:15 AM | ClinicalTrials check | ClinicalTrials.gov only (right after daily DB update) |
+| 6:00 PM | 12:30 PM | Main pipeline run #1 | FDA + EMA + Firecrawl (15 companies) |
+| 8:00 PM | 14:30 PM | Main pipeline run #2 | FDA + EMA + Firecrawl (15 companies) |
+| 9:00 PM | 15:30 PM | Daily digest | Sends queued findings |
+| 11:15 PM | 17:45 PM | EOD GitHub update | UPDATES.md + DOCUMENTATION.md + WORKFLOW.md |
+
+### Firecrawl Budget (with both 6PM + 8PM crawls)
+15 companies × 2 runs/day × 30 days = **900 pages/month**
+Free tier = 500 pages/month → **upgrade to Hobby plan (~$16/month, 3,000 pages) required**
+
