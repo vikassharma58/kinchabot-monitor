@@ -219,3 +219,27 @@ Source URL
 ---
 
 *Auto-updated daily by Kincha bot*
+
+### Mar 25, 2026
+**Findings:** 0 new items today
+**Decisions:**
+- Monitoring schedule finalised: 2 runs/day at 6PM + 8PM IST (down from 10 runs/day)
+- All tasks resumed after cost optimisation discussion
+- GitHub token ghp_... stored in task prompts (not in committed files)
+
+**Built/Changed:**
+- UPDATES.md created as daily activity log
+- DOCUMENTATION.md fully updated
+- EOD task updated to write both files nightly
+- Monitoring cron changed to `30 12,14 * * *`
+
+**Pending:**
+- Anthropic API key → implement Haiku for Agents 1/2/4 (~$1/month vs ~$26/month)
+- Email alerts → need Resend.com or SendGrid API key
+- Fix EMA RSS URL (404)
+- Client dashboard UI (GitHub Pages)
+
+
+---
+
+*Auto-updated daily by Kincha bot*
