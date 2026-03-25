@@ -2,21 +2,16 @@
 
 ---
 
-## 2026-03-25
+## 2026-03-25 (Updated)
 
-**Findings:** 0 new items
-**Sources checked:** Pipeline paused until 05:32 UTC; runs at 12:30 + 14:30 UTC (6PM + 8PM IST) resumed — no new findings
-**Pipeline runs:** 2 runs scheduled, pipeline_logs not yet writing (prompt update pending)
-**System changes:**
-- All tasks resumed (were paused Mar 24 for cost optimisation)
-- Monitoring schedule changed: 10 runs/day → 2 runs/day (6PM + 8PM IST)
-- GitHub token restored and stored in task prompts
-- UPDATES.md created as new daily activity log
-- DOCUMENTATION.md fully updated with Mar 24 summary
-**Pending:**
-- Anthropic API key (for Haiku sub-agent calls → drops cost from ~$26 to ~$1/month)
-- Email alerts setup (Resend.com or SendGrid API key)
-- Fix EMA RSS URL (404)
+**CT.gov run (9:42 AM UTC):** 4 findings — BMS Phase 3 (RA + Psoriasis), Eli Lilly Phase 3 (UC + Crohn's)
+**Alerts:** 4 emails sent to vikassharma58@gmail.com
+**Issues fixed today:**
+- Groq 403 (Cloudflare blocking urllib) → fixed: all tasks now use curl via subprocess
+- Wrong table name (`competitive_intel` → `findings`)
+- crawl_items table created + backfilled with 116 rows (March 24 + today)
+**Model migration:** Groq Llama 3.1 8B (Agents 1/2/4) + Groq 3.3 70B (Agent 3) — $0/month
+**GitHub files:** Now updated in descending order (newest at top)
 
 ---
 
