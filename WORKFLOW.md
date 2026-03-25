@@ -209,3 +209,43 @@ This means even after a fresh chat, Kincha can read these files and remember eve
 ---
 
 *Created: 2026-03-25 | Auto-maintained by Kincha bot*
+
+---
+
+## Changes — 2026-03-25
+
+### Sources Updated: Firecrawl restored (6PM run only)
+Company website crawling is back in the pipeline, but only on the **6PM IST run** to stay within the 500 free pages/month Firecrawl limit:
+
+| Run | Sources |
+|-----|---------|
+| 6PM IST | ClinicalTrials + FDA + EMA + **Firecrawl (15 company websites)** |
+| 8PM IST | ClinicalTrials + FDA + EMA only (free APIs) |
+
+**Why 6PM only?** 15 companies × 2 runs × 30 days = 900 pages/month → exceeds free tier (500). 
+15 companies × 1 run × 30 days = 450 pages/month → fits within free tier ✅
+
+### Agent 3 DB Enrichment Step (Sonnet) — Clarified
+
+Agent 3 does more than write alerts. After every new finding, it **extracts structured facts** and updates both databases:
+
+**Neo4j Knowledge Graph updates:**
+- New drug mentioned → creates Drug node with MOA, status, indication
+- Drug approval → adds `[:TREATS {approval_year, region}]` relationship
+- Phase 3 result → updates `drug.phase3_result` and `drug.phase3_date`
+- New partnership/acquisition → adds `[:PARTNERS_WITH]` or `[:ACQUIRED]` relationship
+- New trial → adds `[:IN_PHASE {phase, start_date}]` relationship
+- Competitive threat → adds `[:THREATENS {indication, severity, reason}]` → Pfizer
+
+**Supabase Findings update:**
+- Every new finding saved with full text for future RAG search
+- Fields: company, indication, title, summary, exact content, date, source URL
+
+This means both databases **self-update** as new news comes in — no manual data entry needed.
+
+### Schedule Finalised
+- 6PM IST: full run (free APIs + Firecrawl)
+- 8PM IST: light run (free APIs only)
+- 9PM IST: daily digest
+- 11:15PM IST: GitHub files updated (UPDATES.md + DOCUMENTATION.md + WORKFLOW.md)
+
