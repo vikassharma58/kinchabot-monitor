@@ -360,3 +360,89 @@ When Agents 1, 2 and 4 run on Haiku ($0.25/M input, $1.25/M output) and only Age
 **Haiku is worth implementing** — saves ~$1-1.50/month even at high finding volume.
 To implement: share your Anthropic API key (starts with `sk-ant-...`).
 
+
+
+---
+
+## Model Strategy Update — 2026-03-25 (Update 3)
+
+### Decision: Migrate to Groq + Keep Anthropic as Fallback Only
+
+After cost analysis and quality testing (side-by-side on real KT501 finding), scheduled task LLM calls are migrated from Anthropic to Groq.
+
+---
+
+### New Model Split (Live as of 2026-03-25)
+
+| Agent | Task | Model | Cost |
+|-------|------|-------|------|
+| Agent 1 — Extractor | Find relevant articles from scraped HTML | Groq **Llama 3.1 8B** | $0 |
+| Agent 2 — Categorizer | Classify finding type + extract fields | Groq **Llama 3.1 8B** | $0 |
+| Agent 3 — Alert Writer | Write alert + Neo4j Cypher + Supabase JSON | Groq **Llama 3.3 70B** + DB context | $0 |
+| Agent 4 — QC + Logger | Quality check + log to pipeline_logs + crawl_items | Groq **Llama 3.1 8B** | $0 |
+| **Fallback** | If Groq fails (rate limit/outage) | **Anthropic Haiku (1/2/4) + Sonnet (3)** | ~$0.04/run |
+
+**Key insight on Agent 3:** Groq 70B tested WITHOUT DB context — missed Pfizer competing drug. Tested WITH Supabase/Neo4j context injected — matched Sonnet quality, correctly identified Cibinqo, mechanism differentiation, and timeline. Context was always in our DB; model just needed it passed in. **Agent 3 now queries DB first, then calls Groq 70B.**
+
+Groq API key stored in DOCUMENTATION.md credentials table and all task prompts.
+
+---
+
+### What Anthropic (Sonnet) Is Now Used For
+
+| Use | Model | Cost |
+|-----|-------|------|
+| **This chat (Vikas ↔ Kincha)** | Claude Sonnet via NanoClaw | Part of NanoClaw plan |
+| **Fallback when Groq fails** | Haiku (1/2/4) + Sonnet (3) | ~$0.04/run, rare |
+| **Nothing else** | — | — |
+
+Anthropic API key remains in task prompts purely as fallback. Normal operations cost **$0 in Anthropic tokens.**
+
+---
+
+### Updated Monthly Cost (Groq era)
+
+| Clients | Findings/month | Monthly LLM cost |
+|---------|---------------|-----------------|
+| 1 | Any | **~$0** |
+| 10 | Any | **~$0** |
+| 50 | Any | **~$0** (within free tier) |
+| Fallback incidents | per event | ~$0.04/run |
+
+Groq free tier: 14,400 req/day for 8B, 1,000 req/day for 70B (enough — Agent 3 only runs on findings).
+
+---
+
+### Previous Cost Models (Kept for Reference)
+
+**Haiku-optimised Anthropic plan (superseded 2026-03-25):**
+
+| Finding frequency | Monthly cost |
+|------------------|-------------|
+| 0 findings | ~$0.55 |
+| 60 findings/month | ~$1.10 |
+| 120 findings/month | ~$1.65 |
+
+**Original all-Sonnet plan (superseded 2026-03-24):**
+
+| Finding frequency | Monthly cost |
+|------------------|-------------|
+| 0 findings | ~$2.00 |
+| 60 findings/month | ~$2.30 |
+| 120 findings/month | ~$3.10 |
+
+---
+
+### Scale Roadmap
+
+| Phase | Clients | LLM | Monthly LLM cost |
+|-------|---------|-----|-----------------|
+| **Phase 1 (now)** | 1-5 | Groq free tier | $0 |
+| **Phase 2** | 10-30 | Groq free tier | $0 |
+| **Phase 3** | 50+ | Self-hosted Ollama on VPS (~$40/month) | ~$0.80/client |
+
+Auto-switch (planned Phase 2): local/VPS Ollama first → Groq free → Anthropic fallback. Cost always minimised automatically.
+
+---
+
+*Model strategy updated: 2026-03-25*
